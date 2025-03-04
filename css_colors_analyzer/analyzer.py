@@ -153,91 +153,121 @@ def format_of_color(color: str) -> str:
         return 'named'
 
 
+# Fix the extract_colors_from_content function:
 def extract_colors_from_content(content: str) -> Dict[str, List[str]]:
     """Extract all colors from content and return them organized by normalized value."""
     color_matches = {}
 
     # Extract hex colors
     for match in re.finditer(HEX_COLOR_REGEX, content):
-        color = match.group(0).lower()
-        normalized = normalize_hex_color(color)
+        try:
+            color = match.group(0).lower()
+            normalized = normalize_hex_color(color)
 
-        if normalized not in color_matches:
-            color_matches[normalized] = []
+            if normalized not in color_matches:
+                color_matches[normalized] = []
 
-        if color not in color_matches[normalized]:
-            color_matches[normalized].append(color)
+            if color not in color_matches[normalized]:
+                color_matches[normalized].append(color)
+        except Exception as e:
+            print(f"Warning: Could not parse hex color {match.group(0)}: {e}")
+            continue
 
     # Extract RGB colors
     for match in re.finditer(RGB_COLOR_REGEX, content):
-        color = match.group(0)
-        r, g, b = map(int, match.groups())
-        hex_value = f'#{r:02x}{g:02x}{b:02x}'
+        try:
+            color = match.group(0)
+            groups = match.groups()
+            r, g, b = int(groups[0]), int(groups[1]), int(groups[2])
+            hex_value = f'#{r:02x}{g:02x}{b:02x}'
 
-        if hex_value not in color_matches:
-            color_matches[hex_value] = []
+            if hex_value not in color_matches:
+                color_matches[hex_value] = []
 
-        if color not in color_matches[hex_value]:
-            color_matches[hex_value].append(color)
+            if color not in color_matches[hex_value]:
+                color_matches[hex_value].append(color)
+        except Exception as e:
+            print(f"Warning: Could not parse RGB color {match.group(0)}: {e}")
+            continue
 
     # Extract RGBA colors
     for match in re.finditer(RGBA_COLOR_REGEX, content):
-        color = match.group(0)
-        r, g, b, a = match.groups()
-        hex_value = f'#{int(r):02x}{int(g):02x}{int(b):02x}'
-
-        if hex_value not in color_matches:
-            color_matches[hex_value] = []
-
-        if color not in color_matches[hex_value]:
-            color_matches[hex_value].append(color)
+        try:
+            color = match.group(0)
+            groups = match.groups()
+            # Make sure we only take the first 4 values if more are captured
+            r, g, b, a = groups[0], groups[1], groups[2], groups[3]
+            hex_value = f'#{int(r):02x}{int(g):02x}{int(b):02x}'
+            
+            if hex_value not in color_matches:
+                color_matches[hex_value] = []
+            
+            if color not in color_matches[hex_value]:
+                color_matches[hex_value].append(color)
+        except Exception as e:
+            print(f"Warning: Could not parse RGBA color {match.group(0)}: {e}")
+            continue
 
     # Extract HSL colors
     for match in re.finditer(HSL_COLOR_REGEX, content):
-        color = match.group(0)
-        h, s, l = map(int, match.groups())
-        h = h / 360.0
-        s = s / 100.0
-        l = l / 100.0
+        try:
+            color = match.group(0)
+            groups = match.groups()
+            h, s, l = int(groups[0]), int(groups[1]), int(groups[2])
+            h = h / 360.0
+            s = s / 100.0
+            l = l / 100.0
 
-        r, g, b = colorsys.hls_to_rgb(h, l, s)
-        r, g, b = int(r * 255), int(g * 255), int(b * 255)
-        hex_value = f'#{r:02x}{g:02x}{b:02x}'
+            r, g, b = colorsys.hls_to_rgb(h, l, s)
+            r, g, b = int(r * 255), int(g * 255), int(b * 255)
+            hex_value = f'#{r:02x}{g:02x}{b:02x}'
 
-        if hex_value not in color_matches:
-            color_matches[hex_value] = []
+            if hex_value not in color_matches:
+                color_matches[hex_value] = []
 
-        if color not in color_matches[hex_value]:
-            color_matches[hex_value].append(color)
+            if color not in color_matches[hex_value]:
+                color_matches[hex_value].append(color)
+        except Exception as e:
+            print(f"Warning: Could not parse HSL color {match.group(0)}: {e}")
+            continue
 
     # Extract HSLA colors
     for match in re.finditer(HSLA_COLOR_REGEX, content):
-        color = match.group(0)
-        h, s, l, a = match.groups()
-        h = int(h) / 360.0
-        s = int(s) / 100.0
-        l = int(l) / 100.0
+        try:
+            color = match.group(0)
+            groups = match.groups()
+            h, s, l, a = groups[0], groups[1], groups[2], groups[3]
+            h = int(h) / 360.0
+            s = int(s) / 100.0
+            l = int(l) / 100.0
 
-        r, g, b = colorsys.hls_to_rgb(h, l, s)
-        r, g, b = int(r * 255), int(g * 255), int(b * 255)
-        hex_value = f'#{r:02x}{g:02x}{b:02x}'
+            r, g, b = colorsys.hls_to_rgb(h, l, s)
+            r, g, b = int(r * 255), int(g * 255), int(b * 255)
+            hex_value = f'#{r:02x}{g:02x}{b:02x}'
 
-        if hex_value not in color_matches:
-            color_matches[hex_value] = []
+            if hex_value not in color_matches:
+                color_matches[hex_value] = []
 
-        if color not in color_matches[hex_value]:
-            color_matches[hex_value].append(color)
+            if color not in color_matches[hex_value]:
+                color_matches[hex_value].append(color)
+        except Exception as e:
+            print(f"Warning: Could not parse HSLA color {match.group(0)}: {e}")
+            continue
 
     # Extract named colors
     for match in re.finditer(NAMED_COLOR_REGEX, content, re.IGNORECASE):
-        color = match.group(0).lower()
-        hex_value = NAMED_COLORS.get(color)
+        try:
+            color = match.group(0).lower()
+            hex_value = NAMED_COLORS.get(color)
 
-        if hex_value not in color_matches:
-            color_matches[hex_value] = []
+            if hex_value not in color_matches:
+                color_matches[hex_value] = []
 
-        if color not in color_matches[hex_value]:
-            color_matches[hex_value].append(color)
+            if color not in color_matches[hex_value]:
+                color_matches[hex_value].append(color)
+        except Exception as e:
+            print(f"Warning: Could not parse named color {match.group(0)}: {e}")
+            continue
 
     return color_matches
 
@@ -252,14 +282,22 @@ def analyze_file(file_path: Path) -> Dict[str, List[str]]:
         print(f"Error analyzing {file_path}: {e}", file=sys.stderr)
         return {}
 
-
-def find_files(path: Path, extensions: Set[str]) -> List[Path]:
+# Then modify find_files to use this argument
+def find_files(path: Path, extensions: Set[str], ignore_dirs: List[str] = None) -> List[Path]:
     """Find all files with given extensions in a directory tree."""
+    if ignore_dirs is None:
+        ignore_dirs = []
+    
     if path.is_file():
         return [path] if path.suffix.lower() in extensions else []
-
+    
     files = []
-    for root, _, filenames in os.walk(path):
+    for root, dirs, filenames in os.walk(path):
+        # Remove directories to ignore
+        for ignore_dir in ignore_dirs:
+            if ignore_dir in dirs:
+                dirs.remove(ignore_dir)
+        
         for filename in filenames:
             file_path = Path(root) / filename
             if file_path.suffix.lower() in extensions:
@@ -377,7 +415,9 @@ Examples:
     python color_analyzer.py -d src/styles --pretty (file locations are included by default)
         '''
     )
-
+    
+    parser.add_argument('--ignore', type=str, nargs='+', default=['node_modules'], 
+                       help='Directories to ignore (e.g., node_modules)')
     parser.add_argument('-i', '--input', type=str, help='Input file to analyze')
     parser.add_argument('-d', '--dir', type=str, help='Directory to analyze recursively')
     parser.add_argument('-o', '--output', type=str, help='Output file to save the analysis (default: stdout)')
@@ -393,6 +433,7 @@ Examples:
     file_extensions = {'.css', '.scss', '.less', '.styl', '.tsx', '.jsx', '.js', '.ts'}
     files = []
 
+    # Handle input file
     if args.input:
         input_path = Path(args.input)
         if input_path.is_file():
@@ -401,10 +442,12 @@ Examples:
             print(f"Error: {args.input} is not a file", file=sys.stderr)
             sys.exit(1)
 
+    # Handle directory
     if args.dir:
         dir_path = Path(args.dir)
         if dir_path.is_dir():
-            files.extend(find_files(dir_path, file_extensions))
+            # Only call find_files once with the ignore_dirs parameter
+            files.extend(find_files(dir_path, file_extensions, args.ignore))
         else:
             print(f"Error: {args.dir} is not a directory", file=sys.stderr)
             sys.exit(1)
@@ -426,7 +469,6 @@ Examples:
             print(f"Color analysis saved to {args.output}")
         else:
             print(report)
-
 
 if __name__ == '__main__':
     main()
