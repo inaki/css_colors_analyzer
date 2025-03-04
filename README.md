@@ -176,6 +176,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📬 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+Iñaki - [@iaranzadi](https://twitter.com/iaranzadi) - 
 
 Project Link: [https://github.com/inaki/css-color-analyzer](https://github.com/inaki/css-color-analyzer)
