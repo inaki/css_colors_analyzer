@@ -1,20 +1,22 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="css-color-analyzer",
+    name="css-colors-analyzer",
     version="0.1.0",
     packages=find_packages(),
+    setup_requires=["setuptools>=42.0"],  # Add this line
     entry_points={
         'console_scripts': [
-            'css-color-analyzer=css_color_analyzer.analyzer:main',
+            'css-colors-analyzer=css_colors_analyzer.analyzer:main',
         ],
     },
+    install_requires=["setuptools>=42.0"],  # Add this line too for runtime dependencies
     author="inaki",
     author_email="iiaranzadi@gmail.com",
     description="A tool to analyze colors in CSS and other web files",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/inaki/css-color-analyzer",
+    url="https://github.com/inaki/css-colors-analyzer",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

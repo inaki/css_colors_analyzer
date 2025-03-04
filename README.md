@@ -21,8 +21,11 @@ A powerful Python tool for analyzing colors in your web development codebase. Th
 
 ```bash
 # Clone the repository
-git clone https://github.com/inaki/css-color-analyzer.git
-cd css-color-analyzer
+git clone https://github.com/inaki/css_color_analyzer.git
+cd css_color_analyzer
+
+# Install dependencies
+pip install setuptools>=42.0
 
 # Install the package
 pip install .
@@ -35,16 +38,16 @@ pip install -e .
 
 ```bash
 # Clone the repository
-git clone https://github.com/inaki/css-color-analyzer.git
-cd css-color-analyzer
+git clone https://github.com/inaki/css_color_analyzer.git
+cd css_color_analyzer
 
 # Make the script executable
 chmod +x css_color_analyzer/analyzer.py
 
 # Create a symlink (Linux/macOS)
-ln -s $(pwd)/css_color_analyzer/analyzer.py /usr/local/bin/css-color-analyzer
+ln -s $(pwd)/css_color_analyzer/analyzer.py /usr/local/bin/css_color_analyzer
 # OR add to your user bin directory
-ln -s $(pwd)/css_color_analyzer/analyzer.py ~/.local/bin/css-color-analyzer
+ln -s $(pwd)/css_color_analyzer/analyzer.py ~/.local/bin/css_color_analyzer
 ```
 
 ## 🚀 Usage
@@ -178,4 +181,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Iñaki - [@iaranzadi](https://twitter.com/iaranzadi) - 
 
-Project Link: [https://github.com/inaki/css-color-analyzer](https://github.com/inaki/css-color-analyzer)
+Project Link: [https://github.com/inaki/css_color_analyzer](https://github.com/inaki/css_color_analyzer)

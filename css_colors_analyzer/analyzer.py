@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CSS Color Analyzer
+CSS Colors Analyzer
 
 A tool to analyze colors in CSS and TSX files, tracking their usage,
 variations, file locations, and organizing them by category.
